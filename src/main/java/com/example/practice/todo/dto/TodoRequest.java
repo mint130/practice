@@ -1,0 +1,12 @@
+package com.example.practice.todo.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+@Builder
+public class TodoRequest {
+    Long id;
+}
