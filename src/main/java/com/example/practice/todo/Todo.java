@@ -37,12 +37,8 @@ public class Todo {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public void complete() {
-        this.completed = true;
-    }
-
-    public void reopen() {
-        this.completed = false;
+    public void toggle() {
+        this.completed = !this.completed;
     }
 
     public void update(String title, String content, LocalDateTime deadline) {

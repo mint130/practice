@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository ;
@@ -50,4 +51,24 @@ public class TodoService {
                 .build();
     }
 
+    @Transactional
+    public void deleteTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
+        todoRepository.delete(todo);
+    }
+
+    @Transactional
+    public TodoDetailResponse toggleTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
+        todo.toggle();
+        return TodoDetailResponse.builder()
+                .title(todo.getTitle())
+                .content(todo.getContent())
+                .deadline(todo.getDeadline())
+                .createdAt(todo.getCreatedAt())
+                .completed(todo.getCompleted())
+                .build();
+    }
 }
