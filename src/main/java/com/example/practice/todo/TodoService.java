@@ -7,9 +7,12 @@ import com.example.practice.member.MemberRepository;
 
 import com.example.practice.todo.dto.TodoAddRequest;
 import com.example.practice.todo.dto.TodoDetailResponse;
+import com.example.practice.todo.dto.TodoUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -30,25 +33,13 @@ public class TodoService {
                 .deadline(request.getDeadline())
                 .build();
         todoRepository.save(todo);
-        return TodoDetailResponse.builder()
-                .title(todo.getTitle())
-                .content(todo.getContent())
-                .deadline(todo.getDeadline())
-                .createdAt(todo.getCreatedAt())
-                .completed(todo.getCompleted())
-                .build();
+        return TodoDetailResponse.from(todo);
     }
 
     public TodoDetailResponse getTodo(Long todoId){
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
-        return TodoDetailResponse.builder()
-                .title(todo.getTitle())
-                .content(todo.getContent())
-                .deadline(todo.getDeadline())
-                .createdAt(todo.getCreatedAt())
-                .completed(todo.getCompleted())
-                .build();
+        return TodoDetailResponse.from(todo);
     }
 
     @Transactional
@@ -63,12 +54,25 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
         todo.toggle();
-        return TodoDetailResponse.builder()
-                .title(todo.getTitle())
-                .content(todo.getContent())
-                .deadline(todo.getDeadline())
-                .createdAt(todo.getCreatedAt())
-                .completed(todo.getCompleted())
-                .build();
+        return TodoDetailResponse.from(todo);
+    }
+
+    @Transactional
+    public TodoDetailResponse updateTodo(Long todoId, TodoUpdateRequest request) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
+        if (request.getTitle() != null && request.getTitle().isBlank()) {
+            throw new TodoException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+        if (request.getContent() != null && request.getContent().isBlank()) {
+            throw new TodoException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+        todo.update(request.getTitle(), request.getContent(), request.getDeadline());
+        return TodoDetailResponse.from(todo);
+    }
+
+    @Transactional
+    public int completeExpiredTodos() {
+        return todoRepository.completeExpireTodos(LocalDateTime.now());
     }
 }

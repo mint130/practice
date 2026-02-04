@@ -1,5 +1,6 @@
 package com.example.practice.todo.dto;
 
+import com.example.practice.todo.Todo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,4 +16,14 @@ public class TodoDetailResponse {
     LocalDateTime deadline;
     Boolean completed;
     LocalDateTime createdAt;
+
+    public static TodoDetailResponse from(Todo todo) {
+        return TodoDetailResponse.builder()
+                .title(todo.getTitle())
+                .content(todo.getContent())
+                .deadline(todo.getDeadline())
+                .completed(todo.getCompleted())
+                .createdAt(todo.getCreatedAt())
+                .build();
+    }
 }

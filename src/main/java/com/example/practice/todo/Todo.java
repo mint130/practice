@@ -42,9 +42,9 @@ public class Todo {
     }
 
     public void update(String title, String content, LocalDateTime deadline) {
-        this.title = title;
-        this.content = content;
-        this.deadline = deadline;
+        if(title != null) this.title = title;
+        if(content != null) this.content = content;
+        if(deadline != null) this.deadline = deadline;
     }
 
     @Builder

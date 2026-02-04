@@ -52,10 +52,7 @@ public class MemberService {
     public MemberDetailResponse getMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
-        return MemberDetailResponse.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .build();
+        return MemberDetailResponse.from(member);
     }
 
     @Transactional
@@ -70,9 +67,6 @@ public class MemberService {
         }
         member.update(request.getEmail(), request.getName());
         memberRepository.save(member);
-        return MemberDetailResponse.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .build();
+        return MemberDetailResponse.from(member);
     }
 }
