@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class MemberRequest {
-    @NotNull String email;
-    @NotNull String name;
+public class MemberAddRequest {
+    @NotBlank String email;
+    @NotBlank String name;
 }

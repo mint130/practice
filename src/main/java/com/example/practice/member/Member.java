@@ -21,6 +21,11 @@ public class Member {
     @Column(nullable = false, length = 100)
     private String name;
 
+    public void update(String email, String name) {
+        if(email != null) this.email = email;
+        if(name != null) this.name = name;
+    }
+
     @Builder
     public Member(String email, String name) {
         this.email = email;

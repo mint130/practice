@@ -1,8 +1,10 @@
 package com.example.practice.member;
 
-import com.example.practice.member.dto.MemberRequest;
+import com.example.practice.member.dto.MemberAddRequest;
+import com.example.practice.member.dto.MemberDetailResponse;
 import com.example.practice.member.dto.MemberResponse;
 import com.example.practice.common.exception.ErrorResponse;
+import com.example.practice.member.dto.MemberUpdateRequest;
 import com.example.practice.todo.dto.TodoSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,8 +35,32 @@ public class MemberController {
                     @ApiResponse(responseCode = "409", description = "이미 존재하는 이메일입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
             }
     )
-    public ResponseEntity<MemberResponse> addMember(@RequestBody MemberRequest memberRequest) {
-        return ResponseEntity.ok(memberService.addMember(memberRequest));
+    public ResponseEntity<MemberResponse> addMember(@Valid @RequestBody MemberAddRequest request) {
+        return ResponseEntity.ok(memberService.addMember(request));
+    }
+
+    @GetMapping("/{memberId}")
+    @Operation(
+            summary = "멤버 상세 조회 API",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            }
+    )
+    public ResponseEntity<MemberDetailResponse> getMember(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.getMember(memberId));
+    }
+
+    @PatchMapping("/{memberId}")
+    @Operation(
+            summary = "멤버 수정 API",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            }
+    )
+    public ResponseEntity<MemberDetailResponse> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
+        return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }
 
     @GetMapping("/{memberId}/todos")
