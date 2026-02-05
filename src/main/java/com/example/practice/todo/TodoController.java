@@ -1,9 +1,10 @@
 package com.example.practice.todo;
 
 import com.example.practice.common.exception.ErrorResponse;
-import com.example.practice.todo.dto.TodoAddRequest;
-import com.example.practice.todo.dto.TodoDetailResponse;
-import com.example.practice.todo.dto.TodoUpdateRequest;
+import com.example.practice.common.exception.ExceptionResponseDto;
+import com.example.practice.todo.dto.TodoInsertDto;
+import com.example.practice.todo.dto.TodoDetailResponseDto;
+import com.example.practice.todo.dto.TodoUpdateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +28,10 @@ public class TodoController {
             summary = "할일 생성 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<TodoDetailResponse> addTodo(Long memberId, @Valid @RequestBody TodoAddRequest request) {
+    public ResponseEntity<TodoDetailResponseDto> addTodo(Long memberId, @Valid @RequestBody TodoInsertDto request) {
         return ResponseEntity.ok(todoService.addTodo(memberId, request));
     }
 
@@ -40,10 +40,10 @@ public class TodoController {
             summary = "할일 상세 조회 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<TodoDetailResponse> getTodo(@PathVariable Long todoId) {
+    public ResponseEntity<TodoDetailResponseDto> getTodo(@PathVariable Long todoId) {
         return ResponseEntity.ok(todoService.getTodo(todoId));
     }
 
@@ -52,7 +52,7 @@ public class TodoController {
             summary = "할일 삭제 API",
             responses = {
                     @ApiResponse(responseCode = "204", description = "삭제 성공"),
-                    @ApiResponse(responseCode = "404", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
     public ResponseEntity<Void> deleteTodo(@PathVariable Long todoId) {
@@ -65,10 +65,10 @@ public class TodoController {
             summary = "할일 완료, 미완료 전환 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<TodoDetailResponse> toggleTodo(@PathVariable Long todoId) {
+    public ResponseEntity<TodoDetailResponseDto> toggleTodo(@PathVariable Long todoId) {
         return ResponseEntity.ok(todoService.toggleTodo(todoId));
     }
 
@@ -77,10 +77,10 @@ public class TodoController {
             summary = "할일 수정 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400`", description = "할 일을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<TodoDetailResponse> updateTodo(@PathVariable Long todoId, @Valid @RequestBody TodoUpdateRequest request) {
+    public ResponseEntity<TodoDetailResponseDto> updateTodo(@PathVariable Long todoId, @Valid @RequestBody TodoUpdateDto request) {
         return ResponseEntity.ok(todoService.updateTodo(todoId, request));
     }
 }

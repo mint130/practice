@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Getter
-public class TodoDetailResponse {
+public class TodoDetailResponseDto {
     String title;
     String content;
     LocalDateTime deadline;
     Boolean completed;
     LocalDateTime createdAt;
 
-    public static TodoDetailResponse from(Todo todo) {
-        return TodoDetailResponse.builder()
+    public static TodoDetailResponseDto from(Todo todo) {
+        return TodoDetailResponseDto.builder()
                 .title(todo.getTitle())
                 .content(todo.getContent())
                 .deadline(todo.getDeadline())

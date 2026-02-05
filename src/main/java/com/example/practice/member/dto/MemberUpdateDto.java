@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class MemberResponse {
-    Long memberId;
+public class MemberUpdateDto {
+    private String email;
+    private String name;
 }

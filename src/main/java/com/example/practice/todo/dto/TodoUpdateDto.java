@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class TodoAddRequest {
-    @NotNull String title;
-    @NotNull String content;
+public class TodoUpdateDto {
+    String title;
+    String content;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline;
 }

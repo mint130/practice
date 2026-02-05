@@ -8,12 +8,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class MemberDetailResponse {
+public class MemberDetailResponseDto {
     String email;
     String name;
 
-    public static MemberDetailResponse from(Member member) {
-        return MemberDetailResponse.builder()
+    public static MemberDetailResponseDto from(Member member) {
+        return MemberDetailResponseDto.builder()
                 .email(member.getEmail())
                 .name(member.getName())
                 .build();

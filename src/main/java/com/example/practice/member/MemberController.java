@@ -1,11 +1,12 @@
 package com.example.practice.member;
 
-import com.example.practice.member.dto.MemberAddRequest;
-import com.example.practice.member.dto.MemberDetailResponse;
-import com.example.practice.member.dto.MemberResponse;
+import com.example.practice.common.exception.ExceptionResponseDto;
+import com.example.practice.member.dto.MemberInsertDto;
+import com.example.practice.member.dto.MemberDetailResponseDto;
+import com.example.practice.member.dto.MemberResponseDto;
 import com.example.practice.common.exception.ErrorResponse;
-import com.example.practice.member.dto.MemberUpdateRequest;
-import com.example.practice.todo.dto.TodoSimpleResponse;
+import com.example.practice.member.dto.MemberUpdateDto;
+import com.example.practice.todo.dto.TodoSimpleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,11 +32,11 @@ public class MemberController {
             summary = "멤버 생성 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-                    @ApiResponse(responseCode = "409", description = "이미 존재하는 이메일입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "이미 존재하는 이메일입니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class)))
             }
     )
-    public ResponseEntity<MemberResponse> addMember(@Valid @RequestBody MemberAddRequest request) {
+    public ResponseEntity<MemberResponseDto> addMember(@Valid @RequestBody MemberInsertDto request) {
         return ResponseEntity.ok(memberService.addMember(request));
     }
 
@@ -44,10 +45,10 @@ public class MemberController {
             summary = "멤버 상세 조회 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<MemberDetailResponse> getMember(@PathVariable Long memberId) {
+    public ResponseEntity<MemberDetailResponseDto> getMember(@PathVariable Long memberId) {
         return ResponseEntity.ok(memberService.getMember(memberId));
     }
 
@@ -56,10 +57,10 @@ public class MemberController {
             summary = "멤버 수정 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<MemberDetailResponse> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
+    public ResponseEntity<MemberDetailResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateDto request) {
         return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }
 
@@ -68,10 +69,10 @@ public class MemberController {
             summary = "멤버 할일 리스트 조회 API",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<List<TodoSimpleResponse>> getTodos(@PathVariable Long memberId) {
+    public ResponseEntity<List<TodoSimpleResponseDto>> getTodos(@PathVariable Long memberId) {
         return ResponseEntity.ok(memberService.getTodos(memberId));
     }
 }

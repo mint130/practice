@@ -1,12 +1,14 @@
 package com.example.practice.member;
 
+import com.example.practice.common.exception.DuplicatedException;
 import com.example.practice.common.exception.ErrorCode;
-import com.example.practice.member.dto.MemberAddRequest;
-import com.example.practice.member.dto.MemberDetailResponse;
-import com.example.practice.member.dto.MemberResponse;
-import com.example.practice.member.dto.MemberUpdateRequest;
+import com.example.practice.common.exception.NotFoundException;
+import com.example.practice.member.dto.MemberInsertDto;
+import com.example.practice.member.dto.MemberDetailResponseDto;
+import com.example.practice.member.dto.MemberResponseDto;
+import com.example.practice.member.dto.MemberUpdateDto;
 import com.example.practice.todo.TodoRepository;
-import com.example.practice.todo.dto.TodoSimpleResponse;
+import com.example.practice.todo.dto.TodoSimpleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +25,10 @@ public class MemberService {
 
     // 회원 추가
     @Transactional
-    public MemberResponse addMember(MemberAddRequest request) {
+    public MemberResponseDto addMember(MemberInsertDto request) {
         if (memberRepository.existsByEmail(request.getEmail())) {
-            throw new MemberException(ErrorCode.MEMBER_EMAIL_DUPLICATED);
+            //throw new MemberException(ErrorCode.MEMBER_EMAIL_DUPLICATED);
+            throw new DuplicatedException("Duplicated email = " + request.getEmail());
         }
         Member member = Member.builder()
                 .email(request.getEmail())
@@ -33,16 +36,16 @@ public class MemberService {
                 .build();
 
         Member savedMember = memberRepository.save(member);
-        return MemberResponse.builder().memberId(savedMember.getId()).build();
+        return MemberResponseDto.builder().memberId(savedMember.getId()).build();
     }
 
     // 회원의 할 일 목록
-    public List<TodoSimpleResponse> getTodos(Long memberId) {
+    public List<TodoSimpleResponseDto> getTodos(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + memberId));
         return todoRepository.findByMember(member)
                 .stream()
-                .map(todo -> TodoSimpleResponse.builder()
+                .map(todo -> TodoSimpleResponseDto.builder()
                         .id(todo.getId())
                         .title(todo.getTitle())
                         .deadline(todo.getDeadline())
@@ -51,17 +54,17 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    public MemberDetailResponse getMember(Long memberId) {
+    public MemberDetailResponseDto getMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
-        return MemberDetailResponse.from(member);
+                .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + memberId));
+        return MemberDetailResponseDto.from(member);
     }
 
     // 회원 정보 수정
     @Transactional
-    public MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request) {
+    public MemberDetailResponseDto updateMember(Long memberId, MemberUpdateDto request) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + memberId));
         if (request.getEmail() != null && request.getEmail().isBlank()) {
             throw new MemberException(ErrorCode.INVALID_INPUT_VALUE);
         }
@@ -70,6 +73,6 @@ public class MemberService {
         }
         member.update(request.getEmail(), request.getName());
         memberRepository.save(member);
-        return MemberDetailResponse.from(member);
+        return MemberDetailResponseDto.from(member);
     }
 }
