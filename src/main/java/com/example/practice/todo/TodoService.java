@@ -67,12 +67,12 @@ public class TodoService {
     public TodoDetailResponseDto updateTodo(Long todoId, TodoUpdateDto request) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(()->new NotFoundException("Not Found todo by idx =" + todoId));
-        if (request.getTitle() != null && request.getTitle().isBlank()) {
+        /* if (request.getTitle() != null && request.getTitle().isBlank()) {
             throw new TodoException(ErrorCode.INVALID_INPUT_VALUE);
         }
         if (request.getContent() != null && request.getContent().isBlank()) {
             throw new TodoException(ErrorCode.INVALID_INPUT_VALUE);
-        }
+        } */
         todo.update(request.getTitle(), request.getContent(), request.getDeadline());
         return TodoDetailResponseDto.from(todo);
     }

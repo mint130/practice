@@ -65,12 +65,12 @@ public class MemberService {
     public MemberDetailResponseDto updateMember(Long memberId, MemberUpdateDto request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + memberId));
-        if (request.getEmail() != null && request.getEmail().isBlank()) {
+        /*if (request.getEmail() != null && request.getEmail().isBlank()) {
             throw new MemberException(ErrorCode.INVALID_INPUT_VALUE);
         }
         if (request.getName() != null && request.getName().isBlank()) {
             throw new MemberException(ErrorCode.INVALID_INPUT_VALUE);
-        }
+        }*/
         member.update(request.getEmail(), request.getName());
         memberRepository.save(member);
         return MemberDetailResponseDto.from(member);
