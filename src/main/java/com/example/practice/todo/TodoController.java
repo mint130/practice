@@ -31,7 +31,7 @@ public class TodoController {
                     @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<TodoDetailResponseDto> addTodo(Long memberId, @Valid @RequestBody TodoInsertDto request) {
+    public ResponseEntity<TodoDetailResponseDto> addTodo(@RequestParam Long memberId, @Valid @RequestBody TodoInsertDto request) {
         return ResponseEntity.ok(todoService.addTodo(memberId, request));
     }
 
