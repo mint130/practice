@@ -21,6 +21,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository ;
 
+    // 할 일 생성
     @Transactional
     public TodoDetailResponse addTodo(Long memberId, TodoAddRequest request) {
         Member member = memberRepository.findById(memberId)
@@ -36,12 +37,14 @@ public class TodoService {
         return TodoDetailResponse.from(todo);
     }
 
+    // 할 일 조회
     public TodoDetailResponse getTodo(Long todoId){
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(()->new TodoException(ErrorCode.TODO_NOT_FOUND));
         return TodoDetailResponse.from(todo);
     }
 
+    // 할 일 삭제
     @Transactional
     public void deleteTodo(Long todoId) {
         Todo todo = todoRepository.findById(todoId)
@@ -49,6 +52,7 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
+    // 할 일 완료 <> 미완료 전환
     @Transactional
     public TodoDetailResponse toggleTodo(Long todoId) {
         Todo todo = todoRepository.findById(todoId)
@@ -57,6 +61,7 @@ public class TodoService {
         return TodoDetailResponse.from(todo);
     }
 
+    // 할 일 수정
     @Transactional
     public TodoDetailResponse updateTodo(Long todoId, TodoUpdateRequest request) {
         Todo todo = todoRepository.findById(todoId)
@@ -71,6 +76,7 @@ public class TodoService {
         return TodoDetailResponse.from(todo);
     }
 
+    // 일정 시간마다 deadline 지났고 완료되지 않은 할 일 완료 처리
     @Transactional
     public int completeExpiredTodos() {
         return todoRepository.completeExpireTodos(LocalDateTime.now());

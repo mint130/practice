@@ -21,6 +21,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
 
+    // 회원 추가
     @Transactional
     public MemberResponse addMember(MemberAddRequest request) {
         if (memberRepository.existsByEmail(request.getEmail())) {
@@ -35,6 +36,7 @@ public class MemberService {
         return MemberResponse.builder().memberId(savedMember.getId()).build();
     }
 
+    // 회원의 할 일 목록
     public List<TodoSimpleResponse> getTodos(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
@@ -55,6 +57,7 @@ public class MemberService {
         return MemberDetailResponse.from(member);
     }
 
+    // 회원 정보 수정
     @Transactional
     public MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request) {
         Member member = memberRepository.findById(memberId)
