@@ -1,6 +1,5 @@
 package com.example.practice.todo;
 
-import com.example.practice.common.exception.ErrorResponse;
 import com.example.practice.common.exception.ExceptionResponseDto;
 import com.example.practice.todo.dto.TodoInsertDto;
 import com.example.practice.todo.dto.TodoDetailResponseDto;
