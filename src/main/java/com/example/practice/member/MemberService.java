@@ -3,10 +3,7 @@ package com.example.practice.member;
 import com.example.practice.common.exception.DuplicatedException;
 import com.example.practice.common.exception.ErrorCode;
 import com.example.practice.common.exception.NotFoundException;
-import com.example.practice.member.dto.MemberInsertDto;
-import com.example.practice.member.dto.MemberDetailResponseDto;
-import com.example.practice.member.dto.MemberResponseDto;
-import com.example.practice.member.dto.MemberUpdateDto;
+import com.example.practice.member.dto.*;
 import com.example.practice.todo.TodoRepository;
 import com.example.practice.todo.TodoRepositoryImpl;
 import com.example.practice.todo.dto.TodoSimpleResponseDto;
@@ -23,7 +20,6 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
-    private final TodoRepositoryImpl todoRepositoryImpl;
 
     // 회원 추가
     @Transactional
@@ -42,18 +38,11 @@ public class MemberService {
     }
 
     // 회원의 할 일 목록
-    public List<TodoSimpleResponseDto> getTodos(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + memberId));
-        return todoRepository.findByMember(member)
-                .stream()
-                .map(todo -> TodoSimpleResponseDto.builder()
-                        .id(todo.getId())
-                        .title(todo.getTitle())
-                        .deadline(todo.getDeadline())
-                        .completed(todo.getCompleted())
-                        .build())
-                .collect(Collectors.toList());
+    public List<TodoSimpleResponseDto> getTodos(MemberQueryDto queryDto) {
+        Member member = memberRepository.findById(queryDto.getMemberId())
+                .orElseThrow(() -> new NotFoundException("Not Found member by idx = " + queryDto.getMemberId()));
+
+        return todoRepository.findAll(queryDto);
     }
 
     public MemberDetailResponseDto getMember(Long memberId) {
@@ -78,19 +67,4 @@ public class MemberService {
         return MemberDetailResponseDto.from(member);
     }
 
-    // 회원의 완료한 할 일 목록 조회
-    public List<TodoSimpleResponseDto> getCompletedTodos(Long memberId) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new NotFoundException("Not Found member by idx = " + memberId);
-        }
-        return todoRepositoryImpl.findCompletedTodosByMemberId(memberId);
-    }
-
-    // 제목으로 할 일 검색
-    public List<TodoSimpleResponseDto> searchByTitle(String keyword, Long memberId) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new NotFoundException("Not Found member by idx = " + memberId);
-        }
-        return todoRepositoryImpl.findByTitleContaining(keyword, memberId);
-    }
 }

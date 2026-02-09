@@ -1,11 +1,7 @@
 package com.example.practice.member;
 
 import com.example.practice.common.exception.ExceptionResponseDto;
-import com.example.practice.member.dto.MemberInsertDto;
-import com.example.practice.member.dto.MemberDetailResponseDto;
-import com.example.practice.member.dto.MemberResponseDto;
-import com.example.practice.common.exception.ErrorResponse;
-import com.example.practice.member.dto.MemberUpdateDto;
+import com.example.practice.member.dto.*;
 import com.example.practice.todo.dto.TodoSimpleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -72,30 +68,30 @@ public class MemberController {
                     @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
             }
     )
-    public ResponseEntity<List<TodoSimpleResponseDto>> getTodos(@PathVariable Long memberId) {
-        return ResponseEntity.ok(memberService.getTodos(memberId));
+    public ResponseEntity<List<TodoSimpleResponseDto>> getTodos(@ModelAttribute MemberQueryDto queryDto) {
+        return ResponseEntity.ok(memberService.getTodos(queryDto));
     }
 
-    @GetMapping("/{memberId}/todos/completed")
-    @Operation(
-            summary = "멤버의 완료한 할일 리스트 조회 API",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
-            }
-    )
-    public ResponseEntity<List<TodoSimpleResponseDto>> getCompletedTodos(@PathVariable Long memberId) {
-        return ResponseEntity.ok(memberService.getCompletedTodos(memberId));
-    }
-
-    @GetMapping("/{memberId}/todos/search")
-    @Operation(
-            summary = "할일 제목 검색 API",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
-    public ResponseEntity<List<TodoSimpleResponseDto>> searchByTitle(@RequestParam String keyword, @PathVariable Long memberId) {
-        return ResponseEntity.ok(memberService.searchByTitle(keyword, memberId));
-    }
+//    @GetMapping("/{memberId}/todos/completed")
+//    @Operation(
+//            summary = "멤버의 완료한 할일 리스트 조회 API",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+//                    @ApiResponse(responseCode = "400", description = "회원을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ExceptionResponseDto.class))),
+//            }
+//    )
+//    public ResponseEntity<List<TodoSimpleResponseDto>> getCompletedTodos(@PathVariable Long memberId) {
+//        return ResponseEntity.ok(memberService.getCompletedTodos(memberId));
+//    }
+//
+//    @GetMapping("/{memberId}/todos/search")
+//    @Operation(
+//            summary = "할일 제목 검색 API",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "요청 성공")
+//            }
+//    )
+//    public ResponseEntity<List<TodoSimpleResponseDto>> searchByTitle(@RequestParam String keyword, @PathVariable Long memberId) {
+//        return ResponseEntity.ok(memberService.searchByTitle(keyword, memberId));
+//    }
 }
