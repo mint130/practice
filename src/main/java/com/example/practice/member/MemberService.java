@@ -1,18 +1,15 @@
 package com.example.practice.member;
 
 import com.example.practice.common.exception.DuplicatedException;
-import com.example.practice.common.exception.ErrorCode;
 import com.example.practice.common.exception.NotFoundException;
 import com.example.practice.member.dto.*;
 import com.example.practice.todo.TodoRepository;
-import com.example.practice.todo.TodoRepositoryImpl;
 import com.example.practice.todo.dto.TodoSimpleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
