@@ -34,7 +34,7 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
             booleanBuilder.and(todo.title.contains(queryDto.getKeyword()));
         }
 
-        List<TodoSimpleResponseDto> results = queryFactory.select(Projections.fields(TodoSimpleResponseDto.class,
+        return queryFactory.select(Projections.fields(TodoSimpleResponseDto.class,
                         todo.id,
                         todo.title,
                         todo.deadline,
@@ -44,7 +44,5 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
                 .where(booleanBuilder)
                 .orderBy(todo.createdAt.desc())
                 .fetch();
-
-        return results;
     }
 }
