@@ -30,7 +30,7 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
             }
         }
 
-        if (!queryDto.getKeyword().isEmpty()) {
+        if (queryDto.getKeyword() != null && !queryDto.getKeyword().isEmpty()) {
             booleanBuilder.and(todo.title.contains(queryDto.getKeyword()));
         }
 
