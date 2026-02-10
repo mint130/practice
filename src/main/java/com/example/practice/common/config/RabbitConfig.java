@@ -15,13 +15,13 @@ public class RabbitConfig {
     public static final String DIRECT_EXCHANGE = "direct.exchange";
     public static final String TOPIC_EXCHANGE = "topic.exchange";
     public static final String FANOUT_EXCHANGE = "fanout.exchange";
-    public static final String DIRECT_KEY = "exact.key";
+    public static final String TODO_EXCHANGE = "todo.exchange";
 
     public static final String QUEUE1 = "queue1";
     public static final String QUEUE2 = "queue2";
     public static final String QUEUE3 = "queue3";
 
-    public static final String TODO_EXCHANGE = "todo.exchange";
+    public static final String DIRECT_KEY = "exact.key";
     public static final String TODO_KEY = "todo.key";
 
     @Bean
@@ -61,6 +61,11 @@ public class RabbitConfig {
     @Bean
     public Binding topicBinding(Queue queue2, TopicExchange topicExchange) {
         return BindingBuilder.bind(queue2).to(topicExchange).with("pattern.*");
+    }
+
+    @Bean
+    public Binding topic2Binding(Queue queue1, TopicExchange topicExchange) {
+        return BindingBuilder.bind(queue1).to(topicExchange).with("*.test");
     }
 
     @Bean
